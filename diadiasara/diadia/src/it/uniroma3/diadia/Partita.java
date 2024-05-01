@@ -2,8 +2,6 @@ package it.uniroma3.diadia;
 
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ambienti.Stanza;
-import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.giocatore.Borsa;
 import it.uniroma3.diadia.giocatore.Giocatore;
 
 /**
@@ -15,27 +13,62 @@ import it.uniroma3.diadia.giocatore.Giocatore;
  */
 
 public class Partita {
-
-	static final private int CFU_INIZIALI = 20;
-
-	private boolean finita;
-	private int cfu;
+	
 	private Labirinto labirinto;
 	private Giocatore giocatore;
-	
+	private Stanza stanzaCorrente;
+
+	private boolean finita;	
+	static final private int CFU_INIZIALI = 20;
+
 	public Partita(){
-		this.giocatore = new Giocatore(CFU_INIZIALI, new Borsa());
-		this.labirinto = new Labirinto();
-		this.finita = false;
-		this.cfu = CFU_INIZIALI;
+		stanzaCorrente = new Stanza();
+		labirinto = new Labirinto();
+		giocatore = new Giocatore();
+		finita = false;
+		giocatore.setCfu(CFU_INIZIALI);
+		
+		setStanzaCorrente(labirinto.getStanzaIniziale());
 	}
 
+	public Stanza getStanzaVincente() {
+		return labirinto.getStanzaFinale();
+	}
+
+	public void setStanzaCorrente(Stanza stanzaCorrente) {
+		this.stanzaCorrente = stanzaCorrente;
+	}
+
+	public Stanza getStanzaCorrente() {
+		return stanzaCorrente;
+	}
+	
+	public Labirinto getLabirinto() {
+		return labirinto;
+	}
+
+	public void setLabirinto(Labirinto labirinto) {
+		this.labirinto = labirinto;
+	}
+
+	public Giocatore getGiocatore() {
+		return giocatore;
+	}
+
+	public void setGiocatore(Giocatore giocatore) {
+		this.giocatore = giocatore;
+	}
+	
+	public void setFinita(boolean finita) {
+		this.finita = finita;
+	}
+	
 	/**
 	 * Restituisce vero se e solo se la partita e' stata vinta
 	 * @return vero se partita vinta
 	 */
 	public boolean vinta() {
-		return this.labirinto.getStanzaCorrente() == this.labirinto.getUscita();
+		return getStanzaCorrente() == labirinto.getStanzaFinale();
 	}
 
 	/**
@@ -43,7 +76,7 @@ public class Partita {
 	 * @return vero se partita finita
 	 */
 	public boolean isFinita() {
-		return finita || vinta() || (cfu == 0);
+		return finita || vinta() || (giocatore.getCfu() == 0);
 	}
 
 	/**
@@ -55,22 +88,15 @@ public class Partita {
 	}
 
 	public int getCfu() {
-		return this.cfu;
+		return giocatore.getCfu();
 	}
 
 	public void setCfu(int cfu) {
-		this.cfu = cfu;		
+		giocatore.setCfu(cfu);	
+	}
+
+	public boolean giocatoreIsVivo() {
+		// TODO Auto-generated method stub
+		return false;
 	}	
-	
-	public void setGiocatore(Giocatore giocatore) {
-		this.giocatore = giocatore;
-	}
-	
-	public Giocatore getGiocatore() {
-		return this.giocatore;
-	}
-	
-	public Labirinto getLabirinto() {
-		return labirinto;
-	}
 }
